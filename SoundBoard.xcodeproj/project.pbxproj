@@ -14,6 +14,7 @@
 		E6B1D5A51F34CA7500BA750C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6B1D5A41F34CA7500BA750C /* Assets.xcassets */; };
 		E6B1D5A81F34CA7500BA750C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6B1D5A61F34CA7500BA750C /* LaunchScreen.storyboard */; };
 		E6B1D5B31F34CA7600BA750C /* SoundBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B1D5B21F34CA7600BA750C /* SoundBoardTests.swift */; };
+		E6FDFAB71F35BC4A0061D0E4 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FDFAB61F35BC4A0061D0E4 /* CustomTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		E6B1D5AE1F34CA7600BA750C /* SoundBoardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoundBoardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6B1D5B21F34CA7600BA750C /* SoundBoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundBoardTests.swift; sourceTree = "<group>"; };
 		E6B1D5B41F34CA7600BA750C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E6FDFAB61F35BC4A0061D0E4 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			children = (
 				E6B1D59A1F34CA7500BA750C /* AppDelegate.swift */,
 				E6B1D59C1F34CA7500BA750C /* ViewController.swift */,
+				E6FDFAB61F35BC4A0061D0E4 /* CustomTableViewCell.swift */,
 				E6B1D59E1F34CA7500BA750C /* Main.storyboard */,
 				E6B1D5A41F34CA7500BA750C /* Assets.xcassets */,
 				E6B1D5A61F34CA7500BA750C /* LaunchScreen.storyboard */,
@@ -204,6 +207,7 @@
 			files = (
 				E6B1D5A31F34CA7500BA750C /* SoundBoard.xcdatamodeld in Sources */,
 				E6B1D59D1F34CA7500BA750C /* ViewController.swift in Sources */,
+				E6FDFAB71F35BC4A0061D0E4 /* CustomTableViewCell.swift in Sources */,
 				E6B1D59B1F34CA7500BA750C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,6 +416,7 @@
 				E6B1D5B91F34CA7600BA750C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E6B1D5BA1F34CA7600BA750C /* Build configuration list for PBXNativeTarget "SoundBoardTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +425,7 @@
 				E6B1D5BC1F34CA7600BA750C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

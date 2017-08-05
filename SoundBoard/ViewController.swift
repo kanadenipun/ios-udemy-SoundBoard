@@ -9,14 +9,12 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var audioRecorder : AVAudioRecorder?
     var audioPlayer : AVAudioPlayer?
     var audioFile : URL?
     var audioSession : AVAudioSession?
-    
-    
     
     @IBOutlet weak var recordButton: UIButton!
     
@@ -26,10 +24,34 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var saveButton: UIButton!
     
+    @IBOutlet weak var tableView: UITableView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
         setupRecorder()
+        saveButton.isEnabled = false;
+        playButton.isEnabled = false;
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+        let cell:CustomTableViewCell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath)  as! CustomTableViewCell
+       
+        cell.cellLabel.text = "Hello"
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Row selected")
     }
     
     func setupRecorder(){
@@ -49,9 +71,6 @@ class ViewController: UIViewController {
             .documentDirectory, .userDomainMask, true).first!
         let pathComponents = [basePath, "recording.m4a"]
         audioFile = NSURL.fileURL(withPathComponents: pathComponents)
-        
-        print("#############  AUDIO URL ###############")
-        print(audioFile?.absoluteString)
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -78,20 +97,21 @@ class ViewController: UIViewController {
             recordButton.setTitle("Record", for: .normal)
             audioRecorder?.stop()
             print("Recording stopped")
+            playButton.isEnabled = true;
+            saveButton.isEnabled = true;
             
         }else{
             recordButton.setTitle("Stop", for: .normal)
             audioRecorder?.record()
             print("Recording Started")
-
+            playButton.isEnabled = false;
+            saveButton.isEnabled = false;
         }
         
     
     }
     
     @IBAction func playButtonTapped(_ sender: Any) {
-        
-        print(audioFile?.absoluteString)
         
         do{
             try audioPlayer = AVAudioPlayer(contentsOf: audioFile!)
@@ -102,6 +122,16 @@ class ViewController: UIViewController {
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
+        
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        let sound = Sound(context: context)
+        
+        sound.name = fileNameTextField.text ?? "No Name"
+        sound.audioFile = NSData(contentsOf: audioFile!)
+        
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        
     }
     
 }
