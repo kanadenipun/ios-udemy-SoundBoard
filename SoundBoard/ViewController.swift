@@ -16,6 +16,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var audioFile : URL?
     var audioSession : AVAudioSession?
     
+    var sounds : [Sound] = []
+    
     @IBOutlet weak var recordButton: UIButton!
     
     @IBOutlet weak var playButton: UIButton!
@@ -31,6 +33,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        getSounds()
         setupRecorder()
         saveButton.isEnabled = false;
         playButton.isEnabled = false;
@@ -40,18 +43,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
         let cell:CustomTableViewCell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath)  as! CustomTableViewCell
        
-        cell.cellLabel.text = "Hello"
+        cell.cellLabel.text = sounds[indexPath.row].name
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return 10
+        return sounds.count
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Row selected")
+    }
+    
+    func getSounds(){
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+        sounds = try context.fetch(Sound.fetchRequest()) as! [Sound]
+        }catch let err as NSError{
+            print("Unable to fetch from core data : " + String(describing: err))
+        }
     }
     
     func setupRecorder(){
@@ -123,6 +134,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBAction func saveButtonTapped(_ sender: Any) {
         
+        print("Save tapped")
+        saveButton.isEnabled = false
+        playButton.isEnabled = false
+        fileNameTextField.text?.removeAll()
+
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         let sound = Sound(context: context)
@@ -132,6 +148,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
         
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
 }
