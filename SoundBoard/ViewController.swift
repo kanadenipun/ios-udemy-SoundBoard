@@ -7,9 +7,15 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
-
+    
+    var audioRecorder : AVAudioRecorder?
+    var audioFile : URL?
+    var audioSession : AVAudioSession?
+    
+    
     @IBOutlet weak var recordButton: UIButton!
     
     @IBOutlet weak var playButton: UIButton!
@@ -21,13 +27,68 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        setupRecorder()
     }
-  
+    
+    func setupRecorder(){
+        do{
+            
+            audioSession = AVAudioSession.sharedInstance()
+            try audioSession!.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try audioSession!.overrideOutputAudioPort(.speaker)
+            try audioSession!.setActive(true)
+        }
+        catch let err as NSError{
+            print("Error occured in audio session " + String(describing: err))
+        }
+        
+        
+        let basePath : String = NSSearchPathForDirectoriesInDomains(
+            .documentDirectory, .userDomainMask, true).first!
+        let pathComponents = [basePath, "recording.m4a"]
+        let audioURL = NSURL.fileURL(withPathComponents: pathComponents)
+        
+        print("#############  AUDIO URL ###############")
+        print(audioURL!.absoluteString)
+        
+        let settings = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 12000,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+        
+        do {
+            try audioRecorder = AVAudioRecorder(url: audioURL!, settings: settings)
+            audioRecorder!.prepareToRecord()
+            
+        }    catch let err as NSError{
+            print("Error occured in audio recorder " + String(describing: err))
+        }
+        
+    }
+    
     @IBAction func recordButtonTapped(_ sender: Any, forEvent event: UIEvent) {
+        
+        print("record button tapped")
+        
+        if(audioRecorder!.isRecording){
+            recordButton.setTitle("Record", for: .normal)
+            audioRecorder?.stop()
+            print("Recording stopped")
+            
+        }else{
+            recordButton.setTitle("Stop", for: .normal)
+            audioRecorder?.record()
+            print("Recording Started")
+
+        }
+        
+    
     }
     
     @IBAction func playButtonTapped(_ sender: Any) {
+        
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
