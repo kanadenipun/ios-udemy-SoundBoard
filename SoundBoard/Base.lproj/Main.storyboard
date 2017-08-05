@@ -27,6 +27,9 @@
                                     <constraint firstAttribute="width" constant="100" id="IVA-hZ-aKW"/>
                                 </constraints>
                                 <state key="normal" title="Record"/>
+                                <connections>
+                                    <action selector="recordButtonTapped:forEvent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cha-9P-FP2"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GsP-xn-Mgy">
                                 <rect key="frame" x="137" y="170" width="100" height="30"/>
@@ -34,6 +37,9 @@
                                     <constraint firstAttribute="width" constant="100" id="cSY-ik-gAO"/>
                                 </constraints>
                                 <state key="normal" title="Play"/>
+                                <connections>
+                                    <action selector="playButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HVI-5n-Yg7"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gcy-NB-UVc">
                                 <rect key="frame" x="137" y="270" width="100" height="30"/>
@@ -41,6 +47,9 @@
                                     <constraint firstAttribute="width" constant="100" id="6Bo-gt-4py"/>
                                 </constraints>
                                 <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="saveButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="EVf-uY-DLj"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="J62-hv-Wpr">
                                 <rect key="frame" x="137" y="220" width="100" height="30"/>
@@ -64,6 +73,12 @@
                             <constraint firstItem="GsP-xn-Mgy" firstAttribute="top" secondItem="68M-Qj-42y" secondAttribute="bottom" constant="20" id="vvh-MH-M1o"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="fileNameTextField" destination="J62-hv-Wpr" id="VFL-Im-Gte"/>
+                        <outlet property="playButton" destination="GsP-xn-Mgy" id="Th4-0O-7y2"/>
+                        <outlet property="recordButton" destination="68M-Qj-42y" id="E13-b7-7gH"/>
+                        <outlet property="saveButton" destination="Gcy-NB-UVc" id="UhV-Z1-GUl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
