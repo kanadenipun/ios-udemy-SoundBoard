@@ -12,8 +12,10 @@ import AVFoundation
 class ViewController: UIViewController {
     
     var audioRecorder : AVAudioRecorder?
+    var audioPlayer : AVAudioPlayer?
     var audioFile : URL?
     var audioSession : AVAudioSession?
+    
     
     
     @IBOutlet weak var recordButton: UIButton!
@@ -46,10 +48,10 @@ class ViewController: UIViewController {
         let basePath : String = NSSearchPathForDirectoriesInDomains(
             .documentDirectory, .userDomainMask, true).first!
         let pathComponents = [basePath, "recording.m4a"]
-        let audioURL = NSURL.fileURL(withPathComponents: pathComponents)
+        audioFile = NSURL.fileURL(withPathComponents: pathComponents)
         
         print("#############  AUDIO URL ###############")
-        print(audioURL!.absoluteString)
+        print(audioFile?.absoluteString)
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -59,7 +61,7 @@ class ViewController: UIViewController {
         ]
         
         do {
-            try audioRecorder = AVAudioRecorder(url: audioURL!, settings: settings)
+            try audioRecorder = AVAudioRecorder(url: audioFile!, settings: settings)
             audioRecorder!.prepareToRecord()
             
         }    catch let err as NSError{
@@ -89,6 +91,14 @@ class ViewController: UIViewController {
     
     @IBAction func playButtonTapped(_ sender: Any) {
         
+        print(audioFile?.absoluteString)
+        
+        do{
+            try audioPlayer = AVAudioPlayer(contentsOf: audioFile!)
+            audioPlayer!.play()
+        }catch let err as NSError{
+            print("Error in playing the file : " + String(describing: err))
+        }
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
