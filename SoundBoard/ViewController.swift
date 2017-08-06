@@ -14,7 +14,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var audioRecorder : AVAudioRecorder?
     var audioPlayer : AVAudioPlayer?
     var audioFile : URL?
-    var audioSession : AVAudioSession?
+    var audioSession : AVAudioSession = AVAudioSession.sharedInstance()
     
     var sounds : [Sound] = []
     
@@ -40,9 +40,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
+        
         let cell:CustomTableViewCell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath)  as! CustomTableViewCell
-       
+        
         cell.cellLabel.text = sounds[indexPath.row].name
         
         return cell
@@ -53,13 +53,45 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Row selected")
+        
+        
+        do{
+            
+            if let sound = sounds[indexPath.row].audioFile as Data? {
+                try audioPlayer = AVAudioPlayer(data: sound)
+                audioPlayer?.play()
+            }
+        }catch let err as NSError{
+            print("Error in playing the file : " + String(describing: err))
+        }
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            let sound = sounds[indexPath.row]
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            
+            context.delete(sound)
+            
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        
+            getSounds()
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+
+            
+        }
     }
     
     func getSounds(){
+        
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         do {
-        sounds = try context.fetch(Sound.fetchRequest()) as! [Sound]
+            sounds = try context.fetch(Sound.fetchRequest()) as! [Sound]
         }catch let err as NSError{
             print("Unable to fetch from core data : " + String(describing: err))
         }
@@ -67,11 +99,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func setupRecorder(){
         do{
-            
-            audioSession = AVAudioSession.sharedInstance()
-            try audioSession!.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try audioSession!.overrideOutputAudioPort(.speaker)
-            try audioSession!.setActive(true)
+            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try audioSession.overrideOutputAudioPort(.speaker)
+            try audioSession.setActive(true)
         }
         catch let err as NSError{
             print("Error occured in audio session " + String(describing: err))
@@ -119,7 +149,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             saveButton.isEnabled = false;
         }
         
-    
+        
     }
     
     @IBAction func playButtonTapped(_ sender: Any) {
@@ -137,8 +167,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print("Save tapped")
         saveButton.isEnabled = false
         playButton.isEnabled = false
-        fileNameTextField.text?.removeAll()
-
+        
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         let sound = Sound(context: context)
@@ -148,9 +177,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
         
+        getSounds()
+        fileNameTextField.text?.removeAll()
+        
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
+        
+        
     }
     
 }
